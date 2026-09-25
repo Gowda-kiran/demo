@@ -1,0 +1,30 @@
+# Which Kubernetes API handles this object, and what kind of object it is
+apiVersion: apps/v1
+kind: Deployment
+
+# Name of the Deployment itself
+metadata:
+  name: demo-app
+
+spec:
+  replicas: 2                  # keep 2 copies (pods) of the app running
+
+  # How the Deployment finds the pods it manages: any pod with this label
+  selector:
+    matchLabels:
+      app: demo-app
+
+  # The TEMPLATE for each pod the Deployment creates
+  template:
+    metadata:
+      labels:
+        app: demo-app          # MUST match selector.matchLabels above
+    spec:
+      containers:
+        - name: demo-app
+          image: demo-app:v1   # the image you built locally in Stage 3
+          # Use the local image instead of downloading from a registry.
+          # (With a "latest" tag, Kubernetes would try to download it and fail.)
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080   # port the Spring Boot app listens on

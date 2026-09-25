@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: demo-app
+
+spec:
+  # NodePort exposes the Service on a fixed port of the node,
+  # so you can reach it from your browser
+  type: NodePort
+
+  # Send traffic to pods that have this label (from the Deployment)
+  selector:
+    app: demo-app
+
+  ports:
+    - port: 80            # the Service's own port inside the cluster
+      targetPort: 8080    # the container port traffic is forwarded to
+      nodePort: 30080     # the port you open in the browser (range 30000-32767)
